@@ -1,0 +1,18 @@
+[project]
+name = "ace-seedance"
+version = "0.1.0"
+description = "Seedance Dify-parity tools through Ace Data Cloud for ComfyUI"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = ["requests>=2.31,<3", "jsonschema>=4,<5"]
+classifiers = ["Operating System :: OS Independent"]
+
+[project.urls]
+Repository = "https://github.com/AceDataCloud/SeedanceComfyUI"
+Documentation = "https://github.com/AceDataCloud/SeedanceComfyUI#readme"
+"Bug Tracker" = "https://github.com/AceDataCloud/SeedanceComfyUI/issues"
+
+[tool.comfy]
+PublisherId = "acedatacloud"
+DisplayName = "Seedance by Ace Data Cloud"
+Icon = "https://raw.githubusercontent.com/AceDataCloud/SeedanceComfyUI/main/assets/logo-400.png"
