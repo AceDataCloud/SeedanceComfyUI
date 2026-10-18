@@ -1,12 +1,18 @@
 # Seedance for ComfyUI by Ace Data Cloud
 
-Use the current [SeedanceDify](https://github.com/AceDataCloud/SeedanceDify) tool contracts as independent ComfyUI nodes. This package exposes all **3 Dify tool definitions** and **9 fixed model IDs** from source snapshot `89fb1f1`. It calls the hosted Ace Data Cloud API; no local model or GPU is needed. Paid actions consume Credits at the [current service price](https://platform.acedata.cloud/models?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_en_pricing).
+Use **Seedance through Ace Data Cloud** directly in your ComfyUI workflow: submit once, keep the returned task ID, then retrieve and preview or save the finished media. Install this independent service package; no local model or GPU is needed. Paid calls use your own Ace account and [current service pricing](https://platform.acedata.cloud/models?utm_source=comfyui&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_en_pricing).
 
-[简体中文](docs/README.zh-CN.md) · [Ace Data Cloud](https://platform.acedata.cloud?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_en_home) · [Issues](https://github.com/AceDataCloud/SeedanceComfyUI/issues)
+[简体中文](docs/README.zh-CN.md) · [Ace Data Cloud](https://platform.acedata.cloud?utm_source=comfyui&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_en_home) · [Issues](https://github.com/AceDataCloud/SeedanceComfyUI/issues)
 
 ## Install
 
-Open **Manager → Custom Nodes Manager** and search **Ace Data Cloud**. Select **Seedance by Ace Data Cloud**, confirm publisher **acedatacloud** and source repository [`AceDataCloud/SeedanceComfyUI`](https://github.com/AceDataCloud/SeedanceComfyUI), then click **Install**. In **Select Version**, explicitly select the approved Registry stable release **0.1.0**. The normal dialog may initially highlight **nightly**; do not accept it for this stable-release tutorial. Keep dependency installation enabled. After **Restart Required**, restart ComfyUI and refresh the browser. Registry ID: `ace-seedance`.
+Open the official [Seedance by Ace Data Cloud Registry page](https://registry.comfy.org/nodes/ace-seedance), or open **Manager → Custom Nodes Manager** and search **Seedance**. Use **Ace Data Cloud** as a fallback to find this publisher’s packages. Select **Seedance by Ace Data Cloud**, confirm publisher **acedatacloud** and source repository [`AceDataCloud/SeedanceComfyUI`](https://github.com/AceDataCloud/SeedanceComfyUI), then click **Install**. In **Select Version**, explicitly select the approved Registry stable release **0.1.0**. The normal dialog may initially highlight **nightly**; do not accept it for this stable-release tutorial. Keep dependency installation enabled. After **Restart Required**, restart ComfyUI and refresh the browser. Registry ID: `ace-seedance`.
+
+![Actual ComfyUI-Manager list with this Ace service package](docs/images/manager-discovery.png)
+
+![Actual Manager list after installation and restart](docs/images/manager-installed.png)
+
+These are real **2026-10-16, ComfyUI 0.41.0 Linux** screenshots from the publisher-brand installation test, not a new paid request or a screenshot of service-only search. See [image sources and limits](docs/screenshot-sources.json).
 
 This Registry stable installation was verified on **2026-10-16 with original ComfyUI 0.41.0 on Linux CPU**. That test did not submit a generation or chat request. Newer host versions and each paid action require their own checks; model availability and price remain subject to the current service rules.
 
@@ -14,7 +20,17 @@ For local source testing, clone this repository into `ComfyUI/custom_nodes/Seeda
 
 ## Key and tool inputs
 
-1. Sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=opensource&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_en_api_key). If your account has no General application, choose **Initialize General Application**.
+### Copy or create your own API Token
+
+The Applications screen is shared across Ace integrations. **1** copies the existing token; **2** opens **Manage Keys**, then **Create**. A new account signs in/registers and initializes **General application** first. Verify this service's access, current price, balance and any expiry/Allowed APIs restrictions.
+
+![Ace Applications: copy token or open Manage Keys](docs/images/get-api-key-en.png)
+
+![Ace Create Key dialog](docs/images/create-api-key-en.png)
+
+These masked **2026-10-08** Ace Console screenshots are reused from SunoDify. The example credential name in the second image is `Dify tutorial`; name yours `ComfyUI`. No credential was created by this guide update. Paste only the token into **the environment of the process that launches ComfyUI** (`ACEDATACLOUD_API_KEY`), then restart. There is no ComfyUI API Key textbox in these nodes; do not paste it into prompt/JSON widgets or the workflow file. An unrelated terminal export does not configure an already-running Desktop process.
+
+1. Sign in to [Ace Data Cloud → Applications](https://platform.acedata.cloud/console/applications?utm_source=comfyui&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_en_api_key). If your account has no General application, choose **Initialize General Application**.
 2. Open **General application** and check access to the service used by this package. A service-specific application key is limited to that service. Copy an existing API key, or choose **Manage Keys → Create** for a separate key named `ComfyUI`.
 3. Copy only the token string, without `Bearer ` or quotation marks. A platform management token is not the API key these nodes use. If you enable **Allowed APIs**, include every submission and task-query path used by your workflow. Check current pricing and available Credits before a paid action.
 
@@ -31,6 +47,14 @@ Each Dify tool has its own node. The model and action selectors expose every fix
 Import [01-configure-and-run.json](examples/01-configure-and-run.json) with **File → Open**, fill its placeholder task ID or JSON parameters, then run. The example is a configuration template; it does not submit a paid request by itself. Query the same task ID until `status` is `succeeded`. The node returns status, task ID, all media URLs as JSON, first media URL, normalized result JSON, and trace ID. Connect a completed Ace CDN URL to the provided `VIDEO` loader where applicable.
 
 Check current service pricing before a paid run. Read-only task queries and media downloads should not generate a new paid task. Destructive Dify actions still require an explicit `confirm: true` in JSON. See [privacy notes](docs/PRIVACY.md).
+
+## First workflow: submit once, then retrieve native media
+
+1. Import [02-submit-once.json](examples/02-submit-once.json) with **File → Open**. After checking your Seedance service access, model and current price, run this **paid submission** workflow once. Copy the task ID shown by Preview as Text. It is deliberately separate from polling.
+2. Import [03-retrieve-native-media.json](examples/03-retrieve-native-media.json), paste that same ID and run. It connects **Retrieve Task → Load Video → Save Video**, with a separate status preview. This graph never submits a new generation.
+3. Wait for status `succeeded` and a real preview/saved file. If still pending, repeat only this retrieve graph with the same ID. If the submit timed out without an ID, inspect request history before paying again.
+
+The JSON files are importable configuration examples; their contracts and links were checked offline on 2026-10-18. No new paid call or screenshot of these new graphs was made.
 
 ## Development
 
