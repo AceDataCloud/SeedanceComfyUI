@@ -4,6 +4,13 @@ Use **Seedance through Ace Data Cloud** directly in your ComfyUI workflow: submi
 
 [简体中文](docs/README.zh-CN.md) · [Ace Data Cloud](https://platform.acedata.cloud?utm_source=comfyui&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_en_home) · [Issues](https://github.com/AceDataCloud/SeedanceComfyUI/issues)
 
+
+## Current version and install source
+
+This source version is **0.1.1**. Check [GitHub Releases](https://github.com/AceDataCloud/SeedanceComfyUI/releases) for its versioned ZIP. The Registry section below retains the last verified **Active 0.1.0 on 2026-10-19**; that older ZIP does not contain this release's updated guide, examples or fixes. To use this version, install its GitHub Release ZIP, or select the exact **0.1.1** Registry release once it becomes Active. Do not substitute the initial nightly selection for a verified stable release.
+
+To install the GitHub ZIP, stop ComfyUI and back up any existing node directory. Extract the ZIP contents into `ComfyUI/custom_nodes/ace-seedance/` without adding an extra nested directory, run `python -m pip install -r requirements.txt` there, then restart and refresh. Keep the API Token in the actual launch-process environment. A GitHub ZIP install is separate from a verified Registry/Manager stable installation.
+
 ## Install
 
 Open the official [Seedance by Ace Data Cloud Registry page](https://registry.comfy.org/nodes/ace-seedance), or open **Manager → Custom Nodes Manager** and search **Seedance**. Use **Ace Data Cloud** as a fallback to find this publisher’s packages. Select **Seedance by Ace Data Cloud**, confirm publisher **acedatacloud** and source repository [`AceDataCloud/SeedanceComfyUI`](https://github.com/AceDataCloud/SeedanceComfyUI), then click **Install**. In **Select Version**, explicitly select the approved Registry stable release **0.1.0**. The normal dialog may initially highlight **nightly**; do not accept it for this stable-release tutorial. Keep dependency installation enabled. After **Restart Required**, restart ComfyUI and refresh the browser. Registry ID: `ace-seedance`.
