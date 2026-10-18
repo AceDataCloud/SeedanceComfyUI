@@ -63,6 +63,19 @@ Check current service pricing before a paid run. Read-only task queries and medi
 
 The JSON files are importable configuration examples; their contracts and links were checked offline on 2026-10-18. No new paid call or screenshot of these new graphs was made.
 
+## Check usage and troubleshoot
+
+For this Seedance workflow, an API key restricted by **Allowed APIs** needs the paths actually used: `/seedance/videos` and `/seedance/tasks`. Confirm service access, key expiry, Credits balance and the current model price in Ace Console before a paid submission. ComfyUI Credits do not pay for this Ace API key.
+
+| Symptom | Action |
+| --- | --- |
+| Key missing or HTTP 401 | Put the API Token in the environment of the process that launches ComfyUI, then restart. A platform management token or an export in another terminal is insufficient. |
+| HTTP 403 | Read the returned error for a service permission, key restriction or content restriction. Correct the authorized request; do not blindly resubmit it. |
+| HTTP 429 | Wait for the service limit. Preserve any accepted task ID and retrieve that task instead of submitting another generation. |
+| Task pending or no preview yet | Run only the retrieve workflow with the same task ID. Submission success alone does not mean the video is finished. |
+| Submission timeout or HTTP 5xx | Inspect Console request history before retrying a paid submission. If a task ID was accepted, retrieve it; do not pay again to poll. |
+| Completed video does not load | Confirm task status is `succeeded`, use its actual Ace CDN media URL and check the native loader input and host compatibility. Do not replace a missing result with another paid generation. |
+
 ## Development
 
 ```bash
