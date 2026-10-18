@@ -2,6 +2,8 @@
 
 在 ComfyUI 画布中通过 **Ace Data Cloud 使用 Seedance**：只提交一次，保存返回的任务 ID，再查询并预览或保存成品。独立安装本服务包，无需本地模型或显卡；收费以你自己的 Ace 账户权限、余额和当前价格为准。
 
+生成前查看[当前模型价格](https://platform.acedata.cloud/models?utm_source=comfyui&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_zh_cn_pricing)与应用余额。
+
 [English guide](../README.md)
 
 ## 官方安装
@@ -31,6 +33,13 @@ Ace 应用页与其他集成共用：图中 **1** 复制已有 Token，**2** 打
 1. 登录 [Ace Data Cloud → 应用](https://platform.acedata.cloud/console/applications?utm_source=comfyui&utm_medium=referral&utm_campaign=evergreen&utm_content=seedancecomfyui_readme_zh_cn_api_key)。新账户没有通用应用时，先选择**初始化通用应用**。
 2. 打开**通用应用**，确认已开通本节点使用的服务。单服务应用的 Key 只限该服务。可复制已有 API Key；需要独立 Key 时，选择**管理 Key → 创建**，命名为 `ComfyUI`。
 3. 只复制 Token 字符串，不加 `Bearer ` 或引号。平台管理 Token 不能代替节点调用 API 的 Key。若启用**允许的 API**限制，需同时包含工作流用到的提交和任务查询路径；收费动作前核对当前价格与 Credits 余额。
+
+终端启动示例（只在私有终端粘贴自己的 Token，然后从同一终端启动）：
+
+```bash
+export ACEDATACLOUD_API_KEY='在此粘贴自己的私有Token'
+python main.py --cpu
+```
 
 在**实际 ComfyUI 进程环境**中设置 `ACEDATACLOUD_API_KEY`（也接受 `ACEDATACLOUD_API_TOKEN`），不要写进工作流或仓库。每个 Dify 工具对应一个节点；model/action 选择器覆盖 Dify YAML 的固定选项，其他字段有具名输入框，留空则省略。数组/对象字段在输入框填 JSON 字符串；高级参数也可放进 `parameters_json` JSON 对象，非空具名字段优先。选 `(from JSON/default)` 则使用 JSON 或 API 默认值。任务查询节点可填 `task_id`，批量查询节点可填 `ids_json`。完整字段和 model 列表见[英文主文档](../README.md)。
 
