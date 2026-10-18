@@ -1,7 +1,7 @@
 [project]
 name = "ace-seedance"
 version = "0.1.0"
-description = "Seedance Dify-parity tools through Ace Data Cloud for ComfyUI"
+description = "Seedance video generation, same-task lookup, and native video loading through Ace Data Cloud"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = ["requests>=2.31,<3", "jsonschema>=4,<5"]

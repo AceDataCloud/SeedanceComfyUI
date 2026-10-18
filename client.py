@@ -6,7 +6,7 @@ import json
 import math
 import re
 import time
-from typing import Any
+from typing import Any, Callable
 from urllib.parse import quote
 
 import requests
@@ -174,13 +174,30 @@ def allows_property(schema: dict[str, Any], name: str, values: dict[str, Any]) -
 
 
 class AceDataSeedanceClient:
-    def __init__(self, bearer_token: str) -> None:
+    def __init__(self, bearer_token: str, *, check_interrupted: Callable[[], None] | None = None) -> None:
         if not isinstance(bearer_token, str) or not bearer_token.strip():
             raise ValueError("An Ace Data Cloud token is required.")
         token = bearer_token.strip()
         self._token = token[7:].strip() if token.lower().startswith("bearer ") else token
+        self._interrupt_check = check_interrupted
         if not self._token:
             raise ValueError("An Ace Data Cloud token is required.")
+
+    def _check_interrupted(self) -> None:
+        if self._interrupt_check is not None:
+            self._interrupt_check()
+
+    def _pause(self, seconds: float) -> None:
+        if self._interrupt_check is None:
+            time.sleep(seconds)
+            return
+        deadline = time.monotonic() + seconds
+        while True:
+            self._check_interrupted()
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                return
+            time.sleep(min(0.1, remaining))
 
     def _request(
         self,
@@ -195,6 +212,7 @@ class AceDataSeedanceClient:
     ) -> dict[str, Any] | list[Any]:
         attempts = 3 if read_only else 1
         for attempt in range(attempts):
+            self._check_interrupted()
             try:
                 with requests.request(
                     method,
@@ -221,8 +239,9 @@ class AceDataSeedanceClient:
                         body["trace_id"] = trace
                 break
             except requests.RequestException as exc:
+                self._check_interrupted()
                 if attempt + 1 < attempts:
-                    time.sleep(0.5 * (attempt + 1))
+                    self._pause(0.5 * (attempt + 1))
                     continue
                 raise AceDataSeedanceError(
                     f"Connection failed ({type(exc).__name__}). Preserve any accepted task ID and inspect request history before resubmitting."
@@ -343,14 +362,16 @@ class AceDataSeedanceClient:
             validate(wait, {"type": "integer", "minimum": 0, "maximum": 240}, "wait_seconds")
             deadline = time.monotonic() + wait
             while True:
+                self._check_interrupted()
                 body = self._request("POST", TASK_PATH, lookup, read_only=True)
+                self._check_interrupted()
                 resolved_id = str(
                     task_id or (body.get("id") if isinstance(body, dict) else "") or ""
                 )
                 result = self.normalize(body, resolved_id, retrieved=True)
                 if result["status"] != "pending" or time.monotonic() >= deadline:
                     return result
-                time.sleep(min(5, max(0, deadline - time.monotonic())))
+                self._pause(min(5, max(0, deadline - time.monotonic())))
         method, path, body, query, headers, read_only, asynchronous = self.prepare(tool, parameters)
         result = self._request(
             method,
