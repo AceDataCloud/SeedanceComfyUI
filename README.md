@@ -63,6 +63,9 @@ Check current service pricing before a paid run. Read-only task queries and medi
 
 The JSON files are importable configuration examples; their contracts and links were checked offline on 2026-10-18. No new paid call or screenshot of these new graphs was made.
 
+
+Cancel in ComfyUI stops local task polling and retry delays at the next interruption check. An HTTP request already in progress may finish or time out first. This does not cancel an accepted remote task or refund it: keep the same task ID and inspect request history before any new paid submission.
+
 ## Check usage and troubleshoot
 
 For this Seedance workflow, an API key restricted by **Allowed APIs** needs the paths actually used: `/seedance/videos` and `/seedance/tasks`. Confirm service access, key expiry, Credits balance and the current model price in Ace Console before a paid submission. ComfyUI Credits do not pay for this Ace API key.

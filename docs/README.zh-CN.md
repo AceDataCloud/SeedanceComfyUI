@@ -53,6 +53,9 @@ python main.py --cpu
 
 这些是可导入配置文件，2026-10-18 已离线校验 API 合同和连接；没有新收费调用，也没有声称已实拍新工作流。
 
+
+在 ComfyUI 中取消会在下一次中断检查时停止本地任务轮询与重试等待；已经发出的 HTTP 请求可能先完成或超时。这不会取消已经接受的远端任务或自动退款；保留同一任务 ID，重发收费提交前先查请求记录。
+
 ## 使用记录与排错
 
 若 Key 启用了**允许的 API**限制，Seedance 工作流需允许实际使用的路径：`/seedance/videos`、`/seedance/tasks`。收费提交前，在 Ace 控制台确认服务权限、Key 有效期、Credits 余额与所选模型当前价格；ComfyUI Credits 不用于支付这个 Ace API Key 的调用。
